@@ -12,6 +12,7 @@ import torch.backends.cudnn as cudnn
 import torchvision
 import torchvision.transforms as transforms
 
+import time
 from net import Net
 
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -19,8 +20,13 @@ print("Device: %s" % device)
 
 print("** Creating transforms.. **")
 # CREATE TRANSFORMS #
-t1 = transforms.Compose([transforms.ToTensor(),
-                                          transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
+                                       transforms.RandomCrop(32, padding=4),
+                                       transforms.ToTensor(),
+                                       transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+
+transforms_testing = transforms.Compose([transforms.ToTensor(),
+                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 #
 
 print("** Defining categories.. **")
@@ -31,12 +37,12 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 print("** Importing and preparing data.. **")
 # IMPORT DATASETS #
 
-bsize = 4  # specifies number of images to load per epoch
+bsize = 2  # specifies number of images to load per epoch
 
-dataset_training = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=t1)
+dataset_training = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transforms_train)
 loader_training = torch.utils.data.DataLoader(dataset_training, batch_size=bsize, shuffle=True, num_workers=0)
 
-dataset_testing = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=t1)
+dataset_testing = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transforms_testing)
 loader_testing = torch.utils.data.DataLoader(dataset_testing, batch_size=bsize, shuffle=False, num_workers=0)
 #
 
@@ -55,6 +61,8 @@ optimiser = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 #
 
 # TRAIN NN #
+
+t0 = time.perf_counter()   # DEBUG ONLY.
 for epoch in range(2):
     running_loss = 0.0
     for i, data in enumerate(loader_training, 0):
@@ -72,7 +80,8 @@ for epoch in range(2):
             print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 2000))
             running_loss = 0.0
 
-print("Finished training.")
+t1 = time.perf_counter() - t0
+print("\nFinished training in %f seconds." % t1)
 #
 
 # SAVE TRAINED MODEL #
