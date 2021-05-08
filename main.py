@@ -1,8 +1,5 @@
 import numpy as np
 
-import pandas as pandas
-import matplotlib.pyplot as plt
-
 import torch
 import torch.nn as nn
 import torch.optim as optim
@@ -21,7 +18,6 @@ print("Device: %s" % device)
 print("** Creating transforms.. **")
 # CREATE TRANSFORMS #
 transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
-                                       transforms.RandomCrop(32, padding=4),
                                        transforms.ToTensor(),
                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
 
