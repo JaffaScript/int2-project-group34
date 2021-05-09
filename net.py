@@ -2,6 +2,8 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+# Input shape: (2, 3, 32, 32) (batch size, channels, height, width)
+
 class Net(nn.Module):
     def __init__(self):
         super().__init__()

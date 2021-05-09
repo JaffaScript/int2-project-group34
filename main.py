@@ -15,14 +15,20 @@ from net import Net
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Device: %s" % device)
 
+# DEFINE HYPERPAREMETERS #
+no_of_epochs = 2
+batch_size = 4
+learning_rate = 0.001
+#
+
 print("** Creating transforms.. **")
 # CREATE TRANSFORMS #
 transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
                                        transforms.ToTensor(),
-                                       transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                                       transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
 
 transforms_testing = transforms.Compose([transforms.ToTensor(),
-                                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))])
+                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
 #
 
 print("** Defining categories.. **")
@@ -33,13 +39,11 @@ classes = ('plane', 'car', 'bird', 'cat', 'deer', 'dog', 'frog', 'horse', 'ship'
 print("** Importing and preparing data.. **")
 # IMPORT DATASETS #
 
-bsize = 2  # specifies number of images to load per epoch
-
 dataset_training = torchvision.datasets.CIFAR10(root='./data', train=True, download=True, transform=transforms_train)
-loader_training = torch.utils.data.DataLoader(dataset_training, batch_size=bsize, shuffle=True, num_workers=0)
+loader_training = torch.utils.data.DataLoader(dataset_training, batch_size=batch_size, shuffle=True, num_workers=0)
 
 dataset_testing = torchvision.datasets.CIFAR10(root='./data', train=False, download=True, transform=transforms_testing)
-loader_testing = torch.utils.data.DataLoader(dataset_testing, batch_size=bsize, shuffle=False, num_workers=0)
+loader_testing = torch.utils.data.DataLoader(dataset_testing, batch_size=batch_size, shuffle=False, num_workers=0)
 #
 
 print("** LOADING COMPLETE! **\n")
@@ -53,13 +57,13 @@ net.to(device)
 
 # DEFINE LOSS FUNCTION & OPTIMIZER #
 criterion = nn.CrossEntropyLoss()
-optimiser = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
+optimiser = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
 #
 
 # TRAIN NN #
 
 t0 = time.perf_counter()   # DEBUG ONLY.
-for epoch in range(2):
+for epoch in range(no_of_epochs):
     running_loss = 0.0
     for i, data in enumerate(loader_training, 0):
         inputs, labels = data[0].to(device), data[1].to(device) # get the inputs; data is a list of [inputs, labels]
