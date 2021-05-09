@@ -56,7 +56,7 @@ net.to(device)
 #
 
 # DEFINE LOSS FUNCTION & OPTIMIZER #
-criterion = nn.CrossEntropyLoss()
+criterion = nn.CrossEntropyLoss()   # because it is a multi-class problem
 optimiser = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
 #
 
