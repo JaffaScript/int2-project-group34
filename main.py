@@ -16,9 +16,9 @@ device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 print("Device: %s" % device)
 
 # DEFINE HYPERPAREMETERS #
-no_of_epochs = 2
+no_of_epochs = 15
 batch_size = 4
-learning_rate = 0.001
+learning_rate = 0.0001
 #
 
 print("** Creating transforms.. **")
