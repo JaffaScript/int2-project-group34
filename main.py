@@ -61,6 +61,7 @@ print("** Building net model.. **")
 
 net = Net()
 net.to(device)
+
 #
 
 # DEFINE LOSS FUNCTION & OPTIMIZER #
