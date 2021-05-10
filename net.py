@@ -15,15 +15,20 @@ class Net(nn.Module):
         self.pool2 = nn.MaxPool2d(3, 2)
         self.conv6 = nn.Conv2d(192, 256, 6, padding=1)
 
+        self.batchnorm1 = nn.BatchNorm2d(6)
+        self.batchnorm2 = nn.BatchNorm2d(64)
+        self.batchnorm3 = nn.BatchNorm2d(192)
+        self.batchnorm4 = nn.BatchNorm2d(256)
+
         self.fc1 = nn.Linear(256*2*2, 500)
         self.fc2 = nn.Linear(500, 10)
 
         self.dropout = nn.Dropout(0.25)
 
     def forward(self, x):
-        x = self.pool1(F.relu(self.conv3(F.relu(self.conv2(F.relu(self.conv1(x)))))))
-        x = self.pool2(F.relu(self.conv5(F.relu(self.conv4(x)))))
-        x = self.conv6(x)
+        x = self.pool1(F.relu(self.batchnorm2(self.conv3(F.relu(self.conv2(F.relu(self.batchnorm1(self.conv1(x)))))))))
+        x = self.pool2(F.relu(self.batchnorm3(self.conv5(F.relu(self.conv4(x))))))
+        x = self.batchnorm4(self.conv6(x))
 
         x = x.view(-1, 256 * 2 * 2)
 
