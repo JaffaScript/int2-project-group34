@@ -205,7 +205,7 @@ def main():
         num_correct_classes = [0 for i in range(10)]
         num_samples_classes = [0 for i in range(10)]
 
-        for data in training_data:
+        for data in training_dataloader:
             images, labels = data[0].to(device), data[1].to(device)
 
             outputs = model(images)
