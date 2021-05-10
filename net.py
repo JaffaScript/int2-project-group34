@@ -21,7 +21,9 @@ class Net(nn.Module):
     def forward(self, x):
         x = self.pool1(F.relu(self.conv3(F.relu(self.conv2(F.relu(self.conv1(x)))))))
         x = self.pool2(F.relu(self.conv5(F.relu(self.conv4(x)))))
-        x = F.relu(self.conv6(x))
+        x = self.conv6(x)
+
+        x = x.view(-1, 256 * 2 * 2)
 
         x = F.relu(self.fc1(x))
         x = self.fc2(x)
