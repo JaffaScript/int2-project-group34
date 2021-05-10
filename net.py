@@ -23,7 +23,7 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(256*2*2, 500)
         self.fc2 = nn.Linear(500, 10)
 
-        self.dropout = nn.Dropout(0.25)
+        self.dropout = nn.Dropout(0.5)
 
     def forward(self, x):
         x = self.pool1(F.relu(self.batchnorm2(self.conv3(F.relu(self.conv2(F.relu(self.batchnorm1(self.conv1(x)))))))))

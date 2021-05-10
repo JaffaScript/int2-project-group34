@@ -31,7 +31,9 @@ print()
 
 print("** Creating transforms.. **")
 # CREATE TRANSFORMS #   
-transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(), 
+transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
+                                       transforms.RandomAdjustSharpness(0.5),
+                                       transforms.RandomGrayscale(0.1),
                                        transforms.ToTensor(),
                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
 
