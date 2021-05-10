@@ -37,12 +37,6 @@ class Net(nn.Module):
         self.relu4 = nn.ReLU()
         self.pool4 = nn.MaxPool2d(kernel_size=2)
 
-        # Constraints for layer 5
-        self.conv5 = nn.Conv2d(in_channels=128, out_channels=256, kernel_size=5, stride=1, padding=2)
-        self.batch5 = nn.BatchNorm2d(256)
-        self.relu5 = nn.ReLU()
-        self.pool5 = nn.MaxPool2d(kernel_size=2)
-
         # Defining the Linear layer
         self.fc = nn.Linear(128 * 2 * 2, 500)
         self.fc2 = nn.Linear(500, 100)
@@ -200,6 +194,35 @@ def main():
 
         accuracy = 100.0 * num_correct / num_samples
         print(f'Accuracy of the network on the 10000 test images: {accuracy} %')
+
+        for i in range(10):
+            accuracy = 100.0 * num_correct_classes[i] / num_samples_classes[i]
+            print(f'Accuracy of class {classes[i]}: {accuracy} %')
+
+    with torch.no_grad():
+        num_correct = 0
+        num_samples = 0
+        num_correct_classes = [0 for i in range(10)]
+        num_samples_classes = [0 for i in range(10)]
+
+        for data in training_data:
+            images, labels = data[0].to(device), data[1].to(device)
+
+            outputs = model(images)
+
+            _, predicted = torch.max(outputs, 1)
+            num_samples += labels.size(0)
+            num_correct += (predicted == labels).sum().item()
+
+            for i in range(4):
+                label = labels[i]
+                prediction = predicted[i]
+                if (label == prediction):
+                    num_correct_classes[label] += 1
+                num_samples_classes[label] += 1
+
+        accuracy = 100.0 * num_correct / num_samples
+        print(f'Accuracy of the network on the 40000 training images: {accuracy} %')
 
         for i in range(10):
             accuracy = 100.0 * num_correct_classes[i] / num_samples_classes[i]
