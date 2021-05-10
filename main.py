@@ -12,12 +12,6 @@ import torchvision.transforms as transforms
 import time
 from net import Net
 
-import getopt, sys
-
-argumentList = map(float, sys.argv[1:])
-options = "lme"
-long_options = ["Learning_Rate=", "Momentum=", "Epochs="]
-
 # DEFINE HYPERPAREMETERS AND ASSIGN DEFAULTS #
 no_of_epochs = 20
 batch_size = 4
