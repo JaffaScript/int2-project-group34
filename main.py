@@ -31,7 +31,7 @@ print()
 
 print("** Creating transforms.. **")
 # CREATE TRANSFORMS #   
-transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
+transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(), 
                                        transforms.ToTensor(),
                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
 
@@ -125,5 +125,5 @@ with torch.no_grad():
         _, predicted = torch.max(outputs.data, 1)
         total += labels.size(0)
         correct += (predicted == labels).sum().item()
-        
+
 print('Accuracy of the network on the training images: %d %%' % (100 * correct / total))

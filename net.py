@@ -18,6 +18,8 @@ class Net(nn.Module):
         self.fc1 = nn.Linear(256*2*2, 500)
         self.fc2 = nn.Linear(500, 10)
 
+        self.dropout = nn.Dropout(0.25)
+
     def forward(self, x):
         x = self.pool1(F.relu(self.conv3(F.relu(self.conv2(F.relu(self.conv1(x)))))))
         x = self.pool2(F.relu(self.conv5(F.relu(self.conv4(x)))))
@@ -25,7 +27,9 @@ class Net(nn.Module):
 
         x = x.view(-1, 256 * 2 * 2)
 
+        x = self.dropout(x)
         x = F.relu(self.fc1(x))
+        x = self.dropout(x)
         x = self.fc2(x)
 
         return x
