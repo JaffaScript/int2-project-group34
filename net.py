@@ -2,8 +2,6 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-# Input shape: (2, 3, 32, 32) (batch size, channels, height, width)
-
 class Net(nn.Module):
     def __init__(self):
         super().__init__()
@@ -22,7 +20,6 @@ class Net(nn.Module):
         self.fc5 = nn.Linear(50, 10)
 
     def forward(self, x):
-
         x = self.pool(F.relu(self.conv2(F.relu(self.conv1(x)))))
         x = self.pool2(F.relu(self.conv4(F.relu(self.conv3(x)))))
         x = x.view(-1, 75*3*3)

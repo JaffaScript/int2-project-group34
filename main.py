@@ -12,17 +12,31 @@ import torchvision.transforms as transforms
 import time
 from net import Net
 
-device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
-print("Device: %s" % device)
+import getopt, sys
 
-# DEFINE HYPERPAREMETERS #
-no_of_epochs = 15
+argumentList = map(float, sys.argv[1:])
+options = "lme"
+long_options = ["Learning_Rate=", "Momentum=", "Epochs="]
+
+# DEFINE HYPERPAREMETERS AND ASSIGN DEFAULTS #
+no_of_epochs = 20
 batch_size = 4
-learning_rate = 0.0001
+learning_rate = 0.001
+momentum = 0.90
 #
 
+print("\nPlease enter hyper parameters:\n-------------------")
+no_of_epochs = int(input("How many epochs: "))
+learning_rate = float(input("Learning rate: "))
+momentum = float(input("Momentum: "))
+print()
+
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
+print("Device: %s" % device)
+print()
+
 print("** Creating transforms.. **")
-# CREATE TRANSFORMS #
+# CREATE TRANSFORMS #   
 transforms_train = transforms.Compose([transforms.RandomHorizontalFlip(),
                                        transforms.ToTensor(),
                                        transforms.Normalize((0.4914, 0.4822, 0.4465), (0.247, 0.243, 0.261))])
@@ -57,7 +71,7 @@ net.to(device)
 
 # DEFINE LOSS FUNCTION & OPTIMIZER #
 criterion = nn.CrossEntropyLoss()   # because it is a multi-class problem
-optimiser = optim.SGD(net.parameters(), lr=learning_rate, momentum=0.9)
+optimiser = optim.SGD(net.parameters(), lr=learning_rate, momentum=momentum)
 #
 
 # TRAIN NN #
